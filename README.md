@@ -1,4 +1,4 @@
-[![](https://img.shields.io/pypi/v/sc2monitor.svg)](https://pypi.org/project/sc2monitor/)
+[![](https://img.shields.io/pypi/v/discordlogger.svg)](https://pypi.org/project/discordlogger/)
 
 # discord-logger
 A Python logger to send information to Discord Webhooks.
