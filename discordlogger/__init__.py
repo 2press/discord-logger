@@ -14,7 +14,7 @@ class DiscordHandler(logging.Handler):
     def __init__(self, webhook_url, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.webhook_url = webhook_url
-        self.formatter = SimpleSlackFormatter()
+        self.formatter = SimpleDiscordFormatter()
 
     def emit(self, record):
         """Submit the record with a POST request"""

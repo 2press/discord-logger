@@ -7,7 +7,7 @@ this_directory = path.abspath(path.dirname(__file__))
 with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
-setup(name='discord-logger',
+setup(name='discordlogger',
       version='0.0.1',
       description=('A Python logger to send information to Discord Webhooks.'),
       long_description=long_description,
@@ -16,7 +16,7 @@ setup(name='discord-logger',
       author='pressure',
       author_email='pres.sure@ymail.com',
       license='MIT',
-      packages=['discord-logger'],
+      packages=['discordlogger'],
       install_requires=[
           'requests'
       ],
