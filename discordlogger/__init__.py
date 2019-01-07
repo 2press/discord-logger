@@ -2,6 +2,8 @@
 from __future__ import absolute_import, unicode_literals
 
 import logging
+import traceback
+from datetime import datetime
 
 import requests
 
@@ -51,19 +53,24 @@ class DiscordFormatter(logging.Formatter):
         Format message content, timestamp when it was logged and a
         coloured border depending on the severity of the message
         """
-        return {'content': record.getMessage()}
-        ret = {
-            'ts': record.created,
-            'text': record.getMessage(),
-        }
+        msg = record.getMessage()
+        exc = record.__dict__['exc_info']
+        if exc:
+            msg = msg + '\n```{}```'.format(traceback.format_exc())
+        embed = dict()
+        embed["description"] = msg
+        embed['timestamp'] = datetime.utcnow().isoformat()
+        embed['author'] = {'name': '{}@{}'.format(
+            record.name, record.filename)}
         try:
-            loglevel_colour = {
-                'INFO': 'good',
-                'WARNING': 'warning',
-                'ERROR': '#E91E63',
-                'CRITICAL': 'danger',
+            colors = {
+                'DEBUG': 810979,
+                'INFO': 1756445,
+                'WARNING': 15633170,
+                'ERROR': 16731648,
+                'CRITICAL': 16711680,
             }
-            ret['color'] = loglevel_colour[record.levelname]
+            embed['color'] = colors[record.levelname]
         except KeyError:
             pass
-        return {'attachments': [ret]}
+        return {'embeds': [embed]}
