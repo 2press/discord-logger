@@ -34,7 +34,7 @@ from discordlogger import DiscordFormatter, DiscordHandler
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 h = DiscordHandler(webhook_url=URL)
-h.formatter = DiscordFormatter()
+h.addFormatter(DiscordFormatter())
 logger.addHandler(h)
 
 logger.info('Hello World')
