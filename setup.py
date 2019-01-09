@@ -8,7 +8,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(name='discordlogger',
-      version='0.0.1',
+      version='0.0.2',
       description=('A Python logger to send information to Discord Webhooks.'),
       long_description=long_description,
       long_description_content_type='text/markdown',
