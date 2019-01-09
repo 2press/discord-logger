@@ -4,6 +4,8 @@ from __future__ import absolute_import, unicode_literals
 import logging
 import traceback
 from datetime import datetime
+from threading import Semaphore
+from time import sleep
 
 import requests
 
@@ -17,12 +19,26 @@ class DiscordHandler(logging.Handler):
         super().__init__(*args, **kwargs)
         self.webhook_url = webhook_url
         self.formatter = SimpleDiscordFormatter()
+        self._lock = Semaphore(5)
 
     def emit(self, record):
         """Submit the record with a POST request"""
+        headers = {'User-agent': f'discord-logger {__version__}'}
+        json_data = self.format(record)
+        max_retries = 3
+        for retries in range(max_retries - 1):
+            with self._lock:
+                r = requests.post(self.webhook_url,
+                                  json=json_data, headers=headers)
+            if r.status_code == 429:
+                retry_after = int(r.headers.get('Retry-After', 500)) / 100.0
+                sleep(retry_after)
+                continue
+            elif r.status_code < 400:
+                break
+            else:
+                continue
         try:
-            json_data = self.format(record)
-            r = requests.post(self.webhook_url, json=json_data)
             r.raise_for_status()
         except Exception:
             self.handleError(record)
